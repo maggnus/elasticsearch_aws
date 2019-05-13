@@ -1,0 +1,17 @@
+#- ec2_instance_facts:
+
+- name: Copy static configuration files
+  copy:
+    src: "{{ item }}"
+    dest: /etc/elasticsearch/
+  notify: restart elasticsearch
+  with_fileglob:
+    - etc/elasticsearch/*
+
+- name: Copy main configuration file
+  template: src=elasticsearch/elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  notify: restart elasticsearch
+
+- name: Start and enable Elasticsearch service
+  service: name=elasticsearch state="{{ es_state | default('started') }}" enabled=yes
+

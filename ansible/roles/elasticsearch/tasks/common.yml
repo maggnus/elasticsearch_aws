@@ -1,0 +1,16 @@
+
+
+#- name: Install epel repository
+#  yum: name="epel-release" state=present update_cache=yes
+
+# name: Install required packages
+# yum: name="java-1.8.0-openjdk" state=present
+
+- name: Import GPG key
+  rpm_key: key=https://artifacts.elastic.co/GPG-KEY-elasticsearch state=present
+
+- name: Copy yum repo file
+  copy: src=etc/yum.repos.d//elastic.repo dest=/etc/yum.repos.d/elastic.repo
+
+- name: Install Elasticsearch and basic packages
+  yum: name="elasticsearch,jq" state=present update_cache=yes
